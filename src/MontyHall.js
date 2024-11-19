@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Confetti from "react-confetti";
 
 function MontyHallGame() {
   const [doors, setDoors] = useState(["🐐", "🐐", "🚗"].sort(() => Math.random() - 0.5)); // Randomize car and goats
@@ -79,6 +80,8 @@ function MontyHallGame() {
     setMessage("Pick a door and trust your instincts!");
   };
 
+  const isWin = gameState === "result" && doors[finalChoice] === "🚗";
+
   return (
     <div
       style={{
@@ -88,15 +91,20 @@ function MontyHallGame() {
         color: "#fff",
         minHeight: "100vh",
         padding: "20px",
+        position: "relative",
+        overflow: "hidden",
       }}
     >
+      {/* Confetti Effect */}
+      {isWin && <Confetti width={window.innerWidth} height={window.innerHeight} />}
+
       <h1 style={{ textTransform: "uppercase", fontWeight: "bold", marginBottom: "10px" }}>
         Monty Hall Game
       </h1>
       <p style={{ fontStyle: "italic", marginBottom: "20px" }}>
         "Life is about choices. Adapt, decide, and thrive."
       </p>
-      <p>{message}</p>
+
       <div style={{ marginBottom: "20px" }}>
         <h3>Score</h3>
         <p>
@@ -112,6 +120,8 @@ function MontyHallGame() {
         <p>
           Wins by Sticking: <b>{score.stickWins}</b>
         </p>
+        <h4 style={{ fontStyle: "italic", marginBottom: "20px" }}>{message}</h4>
+
       </div>
       <div style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
         {doors.map((door, index) => (
