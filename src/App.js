@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+require('dotenv').config()
 import MontyHallGame from './MontyHall';
 function App() {
   return (

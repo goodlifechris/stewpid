@@ -27,13 +27,6 @@ function MontyHallGame() {
       });
     }
   }, []);
-//   // Load score from localStorage on initial render
-//   useEffect(() => {
-//     const savedScore = JSON.parse(localStorage.getItem("montyHallScore"));
-//     if (savedScore) {
-//       setScore(savedScore);
-//     }
-//   }, []);
 
   // Save score to localStorage whenever it updates
   useEffect(() => {
@@ -101,6 +94,8 @@ function MontyHallGame() {
         textAlign: "center",
         fontFamily: "'Montserrat', sans-serif",
         background: "#000",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
         color: "#fff",
         minHeight: "100vh",
         padding: "20px",
@@ -110,7 +105,7 @@ function MontyHallGame() {
     >
       {/* Confetti Effect */}
       {isWin && <Confetti width={window.innerWidth} height={window.innerHeight} />}
-
+      <img style={{height:200, width:200}} src="https://drive.google.com/thumbnail?id=1QbKR0AJvkYghk543IknFnxHSXh87AOqx&sz=w1000" alt="W3Schools.com"/>
       <h1 style={{ textTransform: "uppercase", fontWeight: "bold", marginBottom: "10px" }}>
         Monty Hall Game
       </h1>
