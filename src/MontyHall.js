@@ -16,13 +16,24 @@ function MontyHallGame() {
     stickWins: 0,
   });
 
-  // Load score from localStorage on initial render
   useEffect(() => {
     const savedScore = JSON.parse(localStorage.getItem("montyHallScore"));
     if (savedScore) {
-      setScore(savedScore);
+      setScore({
+        cars: savedScore.cars || 0,
+        goats: savedScore.goats || 0,
+        switchWins: savedScore.switchWins || 0,
+        stickWins: savedScore.stickWins || 0,
+      });
     }
   }, []);
+//   // Load score from localStorage on initial render
+//   useEffect(() => {
+//     const savedScore = JSON.parse(localStorage.getItem("montyHallScore"));
+//     if (savedScore) {
+//       setScore(savedScore);
+//     }
+//   }, []);
 
   // Save score to localStorage whenever it updates
   useEffect(() => {
@@ -57,11 +68,13 @@ function MontyHallGame() {
     const didSwitch = index !== selectedDoor;
 
     setScore((prevScore) => ({
-      cars: isWin ? prevScore.cars + 1 : prevScore.cars,
-      goats: !isWin ? prevScore.goats + 1 : prevScore.goats,
-      switchWins: didSwitch && isWin ? prevScore.switchWins + 1 : prevScore.switchWins,
-      stickWins: !didSwitch && isWin ? prevScore.stickWins + 1 : prevScore.stickWins,
-    }));
+        cars: isWin ? (prevScore.cars || 0) + 1 : prevScore.cars || 0,
+        goats: !isWin ? (prevScore.goats || 0) + 1 : prevScore.goats || 0,
+        switchWins:
+          didSwitch && isWin ? (prevScore.switchWins || 0) + 1 : prevScore.switchWins || 0,
+        stickWins:
+          !didSwitch && isWin ? (prevScore.stickWins || 0) + 1 : prevScore.stickWins || 0,
+      }));
 
     setMessage(
       isWin
