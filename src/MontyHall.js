@@ -6,11 +6,13 @@ function MontyHallGame() {
   const [revealedDoor, setRevealedDoor] = useState(null);
   const [gameState, setGameState] = useState("pick"); // States: pick, reveal, result
   const [finalChoice, setFinalChoice] = useState(null);
-  const [message, setMessage] = useState("Pick a door!");
+  const [message, setMessage] = useState("Pick a door and trust your instincts!");
 
   const [score, setScore] = useState({
     cars: 0,
     goats: 0,
+    switchWins: 0,
+    stickWins: 0,
   });
 
   // Load score from localStorage on initial render
@@ -40,7 +42,9 @@ function MontyHallGame() {
       (door, i) => door === "🐐" && i !== index
     );
     setRevealedDoor(revealIndex);
-    setMessage(`Door ${revealIndex + 1} has a goat! Do you want to switch?`);
+    setMessage(
+      `Door ${revealIndex + 1} has a goat! Will you adapt and switch, or stay the course?`
+    );
     setGameState("reveal");
   };
 
@@ -49,15 +53,19 @@ function MontyHallGame() {
     setFinalChoice(index);
 
     const isWin = doors[index] === "🚗";
+    const didSwitch = index !== selectedDoor;
+
     setScore((prevScore) => ({
       cars: isWin ? prevScore.cars + 1 : prevScore.cars,
       goats: !isWin ? prevScore.goats + 1 : prevScore.goats,
+      switchWins: didSwitch && isWin ? prevScore.switchWins + 1 : prevScore.switchWins,
+      stickWins: !didSwitch && isWin ? prevScore.stickWins + 1 : prevScore.stickWins,
     }));
 
     setMessage(
       isWin
-        ? "🎉 Congratulations! You found the car!"
-        : "😞 Oops! You got a goat."
+        ? "🎉 Victory! Your decision led to success!"
+        : "😞 You got a goat. Every decision builds resilience!"
     );
     setGameState("result");
   };
@@ -68,12 +76,26 @@ function MontyHallGame() {
     setRevealedDoor(null);
     setFinalChoice(null);
     setGameState("pick");
-    setMessage("Pick a door!");
+    setMessage("Pick a door and trust your instincts!");
   };
 
   return (
-    <div style={{ textAlign: "center", fontFamily: "Arial, sans-serif" }}>
-      <h1>Monty Hall Game</h1>
+    <div
+      style={{
+        textAlign: "center",
+        fontFamily: "'Montserrat', sans-serif",
+        background: "#000",
+        color: "#fff",
+        minHeight: "100vh",
+        padding: "20px",
+      }}
+    >
+      <h1 style={{ textTransform: "uppercase", fontWeight: "bold", marginBottom: "10px" }}>
+        Monty Hall Game
+      </h1>
+      <p style={{ fontStyle: "italic", marginBottom: "20px" }}>
+        "Life is about choices. Adapt, decide, and thrive."
+      </p>
       <p>{message}</p>
       <div style={{ marginBottom: "20px" }}>
         <h3>Score</h3>
@@ -82,6 +104,13 @@ function MontyHallGame() {
         </p>
         <p>
           Goats (Losses): <b>{score.goats}</b>
+        </p>
+        <h3>Switch vs Stick Wins</h3>
+        <p>
+          Wins by Switching: <b>{score.switchWins}</b>
+        </p>
+        <p>
+          Wins by Sticking: <b>{score.stickWins}</b>
         </p>
       </div>
       <div style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
@@ -94,7 +123,7 @@ function MontyHallGame() {
                 : gameState === "reveal" && handleFinalChoice(index)
             }
             disabled={
-              gameState === "result" || index === revealedDoor || (gameState === "reveal" && index === selectedDoor)
+              gameState === "result" || index === revealedDoor
             }
             style={{
               width: "100px",
@@ -103,14 +132,13 @@ function MontyHallGame() {
               cursor: gameState === "result" ? "default" : "pointer",
               backgroundColor:
                 gameState === "result" && index === finalChoice
-                  ? "#d3d3d3"
+                  ? "#444"
                   : index === revealedDoor
-                  ? "#ccc"
-                  : "#007BFF",
+                  ? "#666"
+                  : "#222",
               color: "#fff",
-              border: "2px solid black",
+              border: "2px solid #fff",
               borderRadius: "5px",
-              position: "relative",
             }}
           >
             {/* Show door content only after the game ends */}
@@ -151,9 +179,9 @@ function MontyHallGame() {
             padding: "10px 20px",
             fontSize: "16px",
             cursor: "pointer",
-            backgroundColor: "#28A745",
-            color: "#fff",
-            border: "none",
+            backgroundColor: "#fff",
+            color: "#000",
+            border: "2px solid #000",
             borderRadius: "5px",
           }}
         >
